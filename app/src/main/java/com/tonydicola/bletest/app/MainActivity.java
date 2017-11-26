@@ -1,5 +1,6 @@
 package com.tonydicola.bletest.app;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothAdapter.LeScanCallback;
@@ -14,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.app.ActivityCompat;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -99,7 +102,9 @@ public class MainActivity extends Activity {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
-            writeLine("Received: " + characteristic.getStringValue(0));
+//            writeLine("Received: " + characteristic.getFloatValue(BluetoothGattCharacteristic.FORMAT_FLOAT,0));
+            float f1 = ByteBuffer.wrap(characteristic.getValue()).order(ByteOrder.LITTLE_ENDIAN).getFloat();
+            writeLine("Received: " + f1);
         }
     };
 
@@ -132,6 +137,12 @@ public class MainActivity extends Activity {
         input = (EditText) findViewById(R.id.input);
 
         adapter = BluetoothAdapter.getDefaultAdapter();
+        int permissionCheck = this.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
+        permissionCheck += this.checkSelfPermission("Manifest.permission.ACCESS_COARSE_LOCATION");
+        if (permissionCheck != 0) {
+
+            this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001); //Any number
+        }
     }
 
     // OnResume, called right before UI is displayed.  Start the BTLE connection.
