@@ -12,6 +12,12 @@ Once you see the connected and services discovered message, try typing text in t
 
 The source for this app is written in the latest version (3.0.0) of [Android Studio](http://developer.android.com/sdk/installing/studio.html).
 
-Tested on Android 8.0 device (Nexus 6P). Needed to enable USB debugging and set USB configuration to "MTP (Media Transfer Protocl) in Developer Settings -> Select USB Configuration
+Tested on Android 8.0 devices (Nexus 6P, Google Pixel XL). Needed to enable USB debugging and set USB configuration to "MTP (Media Transfer Protocl) in Developer Settings -> Select USB Configuration
+
+This app assumes the UART service is sending a float as a byte array. It is therefore necessary to wrap the received value in a `ByteBuffer` and reorder that data to little endian byte order. see `onCharacteristicChanged` in `MainActivity.java`
+
+```
+float f1 = ByteBuffer.wrap(characteristic.getValue()).order(ByteOrder.LITTLE_ENDIAN).getFloat();
+```
 
 Thanks to [Tony Dicola](https://github.com/tdicola/) for the example code.
