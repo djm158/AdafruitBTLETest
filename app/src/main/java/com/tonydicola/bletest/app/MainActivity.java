@@ -15,8 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.app.ActivityCompat;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -102,9 +100,7 @@ public class MainActivity extends Activity {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
-//            writeLine("Received: " + characteristic.getFloatValue(BluetoothGattCharacteristic.FORMAT_FLOAT,0));
-            float f1 = ByteBuffer.wrap(characteristic.getValue()).order(ByteOrder.LITTLE_ENDIAN).getFloat();
-            writeLine("Received: " + f1);
+            writeLine("Received: " + characteristic.getStringValue(0));
         }
     };
 
